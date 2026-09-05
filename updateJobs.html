@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Update Jobs - Waiba</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f6f8;
+            color: #222;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        /* Header */
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            background: #222;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        /* Search */
+
+        .search-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: #555;
+        }
+
+        /* Job Card */
+
+        .job-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .job-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .job-id {
+            font-size: 14px;
+            color: #777;
+        }
+
+        .job-date {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .job-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .info p {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .info strong {
+            color: #333;
+        }
+
+        /* Status section */
+
+        .status-section {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-section label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .status-section select {
+            padding: 9px 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* Empty message */
+
+        .empty {
+            background: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 12px;
+            color: #777;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .header {
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .header h1 {
+                font-size: 23px;
+            }
+
+            .job-info {
+                grid-template-columns: 1fr;
+            }
+
+            .status-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .status-section select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>Update Jobs</h1>
+
+        <a href="index.html" class="back-btn">
+            ← Dashboard
+        </a>
+    </div>
+
+
+    <!-- Search -->
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search by name, phone, appliance, model, serial number..."
+        >
+
+    </div>
+
+
+    <!-- Jobs will appear here -->
+
+    <div id="jobsContainer"></div>
+
+</div>
+
+
+<script>
+
+    // Get repair data from localStorage
+
+    let data = JSON.parse(localStorage.getItem("repairData")) || [];
+
+
+    const jobsContainer = document.getElementById("jobsContainer");
+    const searchInput = document.getElementById("searchInput");
+
+
+    // Display jobs
+
+    function displayJobs(jobs) {
+
+        jobsContainer.innerHTML = "";
+
+
+        if (jobs.length === 0) {
+
+            jobsContainer.innerHTML = `
+                <div class="empty">
+                    <h3>No repair jobs found</h3>
+                    <p>There are no jobs matching your search.</p>
+                </div>
+            `;
+
+            return;
+        }
+
+
+        // Newest jobs first
+
+        jobs.sort((a, b) => b.jobId - a.jobId);
+
+
+        jobs.forEach(job => {
+
+            const card = document.createElement("div");
+
+            card.className = "job-card";
+
+
+            card.innerHTML = `
+
+                <div class="job-top">
+
+                    <div>
+                        <strong>Job #${job.jobId}</strong>
+                        <div class="job-id">
+                            ${job.customer.name}
+                        </div>
+                    </div>
+
+                    <div class="job-date">
+                        ${job.date}
+                    </div>
+
+                </div>
+
+
+                <div class="job-info">
+
+                    <div class="info">
+                        <p><strong>Phone:</strong> ${job.customer.phone}</p>
+                    </div>
+
+                    <div class="info">
+                        <p><strong>Address:</strong> ${job.customer.address}</p>
+                    </div>
+
+                    <div class="info">
+                        <p><strong>Appliance:</strong> ${job.appliance.type}</p>
+                    </div>
+
+                    <div class="info">
+                        <p><strong>Brand:</strong> ${job.appliance.brand}</p>
+                    </div>
+
+                    <div class="info">
+                        <p><strong>Model:</strong> ${job.appliance.model}</p>
+                    </div>
+
+                    <div class="info">
+                        <p><strong>Serial Number:</strong> ${job.appliance.serialNumber}</p>
+                    </div>
+
+                    <div class="info">
+                        <p><strong>Problem:</strong> ${job.repair.complaint}</p>
+                    </div>
+
+                </div>
+
+
+                <div class="status-section">
+
+                    <label>
+                        Repair Status
+                    </label>
+
+                    <select onchange="updateStatus(${job.jobId}, this.value)">
+
+                        <option value="Received"
+                            ${job.repair.status === "Received" ? "selected" : ""}>
+                            Received
+                        </option>
+
+                        <option value="Repairing"
+                            ${job.repair.status === "Repairing" ? "selected" : ""}>
+                            Repairing
+                        </option>
+
+                        <option value="Ready"
+                            ${job.repair.status === "Ready" ? "selected" : ""}>
+                            Ready
+                        </option>
+
+                        <option value="Completed"
+                            ${job.repair.status === "Completed" ? "selected" : ""}>
+                            Completed
+                        </option>
+
+                    </select>
+
+                </div>
+
+            `;
+
+
+            jobsContainer.appendChild(card);
+
+        });
+
+    }
+
+
+    // Update status
+
+    function updateStatus(jobId, newStatus) {
+
+        const job = data.find(job => job.jobId === jobId);
+
+
+        if (!job) {
+            alert("Job not found.");
+            return;
+        }
+
+
+        job.repair.status = newStatus;
+
+
+        // Save updated data
+
+        localStorage.setItem(
+            "repairData",
+            JSON.stringify(data)
+        );
+
+
+        alert(
+            `Job status updated to "${newStatus}".`
+        );
+
+    }
+
+
+    // Search jobs
+
+    function searchJobs() {
+
+        const searchText =
+            searchInput.value.toLowerCase().trim();
+
+
+        if (searchText === "") {
+
+            displayJobs([...data]);
+
+            return;
+        }
+
+
+        const filteredJobs = data.filter(job => {
+
+            return (
+
+                job.customer.name.toLowerCase().includes(searchText) ||
+
+                job.customer.phone.toLowerCase().includes(searchText) ||
+
+                job.customer.address.toLowerCase().includes(searchText) ||
+
+                job.appliance.type.toLowerCase().includes(searchText) ||
+
+                job.appliance.brand.toLowerCase().includes(searchText) ||
+
+                job.appliance.model.toLowerCase().includes(searchText) ||
+
+                job.appliance.serialNumber.toLowerCase().includes(searchText) ||
+
+                job.repair.complaint.toLowerCase().includes(searchText) ||
+
+                String(job.jobId).includes(searchText)
+
+            );
+
+        });
+
+
+        displayJobs(filteredJobs);
+
+    }
+
+
+    // Search while typing
+
+    searchInput.addEventListener(
+        "input",
+        searchJobs
+    );
+
+
+    // Display all jobs when page opens
+
+    displayJobs([...data]);
+
+</script>
+
+</body>
+</html>

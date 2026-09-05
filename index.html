@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
+    <title>Waiba Management</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f6f8;
+            color: #222;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        /* Header */
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #777;
+            font-size: 14px;
+        }
+
+
+        /* Buttons */
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .action-button {
+            text-decoration: none;
+            background: white;
+            color: #222;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: 0.2s;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .action-button span {
+            display: block;
+            font-size: 13px;
+            color: #777;
+            margin-top: 6px;
+            font-weight: normal;
+        }
+
+
+        /* Statistics */
+
+        .section-title {
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .jobstatus {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .stat {
+            background: white;
+            padding: 18px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .stat p {
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .stat h2 {
+            font-size: 25px;
+        }
+
+
+        /* Recent Jobs */
+
+        .recent-jobs {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .job {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .job:last-child {
+            border-bottom: none;
+        }
+
+        .job-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .job-details {
+            color: #777;
+            font-size: 13px;
+        }
+
+        .status {
+            font-size: 12px;
+            padding: 6px 10px;
+            border-radius: 20px;
+            background: #eee;
+        }
+
+        .no-jobs {
+            color: #777;
+            text-align: center;
+            padding: 20px;
+        }
+
+
+        /* Mobile */
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .jobstatus {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- Header -->
+
+    <div class="header">
+
+        <h1>Waiba Management</h1>
+
+        <p>Motor & Electrical Repair Management</p>
+
+    </div>
+
+
+    <!-- Main Buttons -->
+
+    <div class="buttons">
+
+        <a href="add.html" class="action-button">
+            <i class="fa-solid fa-plus"></i>
+            Add Job
+            <span>Create a new repair job</span>
+        </a>
+
+        <a href="Search.html" class="action-button">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Search Jobs
+            <span>Find repair records</span>
+        </a>
+
+        <a href="UpdateJobs.html" class="action-button">
+            <i class="fa-solid fa-pen-to-square"></i>
+            Update Jobs
+            <span>Update repair status</span>
+        </a>
+
+    </div>
+
+
+    <!-- Statistics -->
+
+    <h2 class="section-title">Job Status</h2>
+
+    <div class="jobstatus">
+
+        <div class="stat">
+            <p>Total Jobs</p>
+            <h2 id="total">0</h2>
+        </div>
+
+        <div class="stat">
+            <p>Received</p>
+            <h2 id="received">0</h2>
+        </div>
+
+        <div class="stat">
+            <p>Repairing</p>
+            <h2 id="repairing">0</h2>
+        </div>
+
+        <div class="stat">
+            <p>Ready</p>
+            <h2 id="ready">0</h2>
+        </div>
+
+        <div class="stat">
+            <p>Completed</p>
+            <h2 id="completed">0</h2>
+        </div>
+
+    </div>
+
+
+    <!-- Recent Jobs -->
+
+    <h2 class="section-title">Recent Jobs</h2>
+
+    <div class="recent-jobs" id="recentJobs">
+
+        <div class="no-jobs">
+            No repair jobs yet.
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+    function updateDashboard() {
+
+        // Get latest data from localStorage
+
+        const data =
+            JSON.parse(localStorage.getItem("repairData")) || [];
+
+
+        // Total
+
+        document.getElementById("total").textContent =
+            data.length;
+
+
+        // Count each status
+
+        const received =
+            data.filter(job =>
+                job.repair.status === "Received"
+            ).length;
+
+        const repairing =
+            data.filter(job =>
+                job.repair.status === "Repairing"
+            ).length;
+
+        const ready =
+            data.filter(job =>
+                job.repair.status === "Ready"
+            ).length;
+
+        const completed =
+            data.filter(job =>
+                job.repair.status === "Completed"
+            ).length;
+
+
+        // Display statistics
+
+        document.getElementById("received").textContent =
+            received;
+
+        document.getElementById("repairing").textContent =
+            repairing;
+
+        document.getElementById("ready").textContent =
+            ready;
+
+        document.getElementById("completed").textContent =
+            completed;
+
+
+        // Display recent jobs
+
+        displayRecentJobs(data);
+
+    }
+
+
+    function displayRecentJobs(data) {
+
+        const recentJobs =
+            document.getElementById("recentJobs");
+
+
+        // Newest jobs first
+
+        data.sort((a, b) => b.jobId - a.jobId);
+
+
+        // Show only latest 5 jobs
+
+        const jobs =
+            data.slice(0, 5);
+
+
+        if (jobs.length === 0) {
+
+            recentJobs.innerHTML = `
+                <div class="no-jobs">
+                    No repair jobs yet.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        recentJobs.innerHTML = "";
+
+
+        jobs.forEach(job => {
+
+            const div =
+                document.createElement("div");
+
+            div.className = "job";
+
+
+            div.innerHTML = `
+
+                <div>
+
+                    <div class="job-name">
+                        ${job.customer.name}
+                    </div>
+
+                    <div class="job-details">
+                        ${job.appliance.type}
+                        •
+                        ${job.appliance.brand}
+                        •
+                        ${job.date}
+                    </div>
+
+                </div>
+
+
+                <div class="status">
+                    ${job.repair.status}
+                </div>
+
+            `;
+
+
+            recentJobs.appendChild(div);
+
+        });
+
+    }
+
+
+    // Run when dashboard opens
+
+    updateDashboard();
+
+
+    /*
+        Check for changes made by another page.
+
+        This means if UpdateJobs.html changes a status,
+        the dashboard can update when it becomes active again.
+    */
+
+    window.addEventListener("storage", function() {
+
+        updateDashboard();
+
+    });
+
+
+</script>
+
+</body>
+</html>

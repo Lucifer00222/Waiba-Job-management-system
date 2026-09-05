@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Repair Job - Waiba</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            color: #222;
+        }
+
+
+        /* Main container */
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            margin: auto;
+            padding: 30px;
+
+            background: white;
+
+            border-radius: 12px;
+
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+        }
+
+
+        /* Header */
+
+        .header {
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+
+            margin: 0 0 15px;
+            padding-bottom: 10px;
+
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header h2 {
+            margin: 0;
+
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+
+        /* Back button */
+
+        .back-button {
+            color: #222;
+
+            text-decoration: none;
+
+            font-size: 20px;
+
+            margin-right: 8px;
+        }
+
+        .back-button:hover {
+            color: #2563eb;
+        }
+
+
+        /* Section */
+
+        .section {
+            margin-top: 25px;
+        }
+
+        .section:first-of-type {
+            margin-top: 0;
+        }
+
+
+        /* Form layout */
+
+        .form-row {
+            display: flex;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .form-group {
+            flex: 1 1 200px;
+
+            margin-top: 10px;
+        }
+
+
+        /* Labels */
+
+        label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-weight: 600;
+
+            font-size: 14px;
+        }
+
+
+        /* Inputs */
+
+        input,
+        textarea {
+
+            width: 100%;
+
+            padding: 11px 12px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 7px;
+
+            font-family: Arial, sans-serif;
+
+            font-size: 15px;
+
+            outline: none;
+
+            background: white;
+
+            transition: 0.2s;
+        }
+
+
+        input:focus,
+        textarea:focus {
+
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 2px rgba(37, 99, 235, 0.08);
+        }
+
+
+        input::placeholder,
+        textarea::placeholder {
+
+            color: #999;
+        }
+
+
+        /* Textarea */
+
+        textarea {
+
+            min-height: 100px;
+
+            resize: vertical;
+        }
+
+
+        /* Submit */
+
+        .submit-button {
+
+            width: 100%;
+
+            margin-top: 25px;
+
+            padding: 13px;
+
+            border: none;
+
+            border-radius: 7px;
+
+            background: #2563eb;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .submit-button:hover {
+
+            background: #1d4ed8;
+        }
+
+
+        .submit-button:active {
+
+            transform: scale(0.99);
+        }
+
+
+        /* Success message */
+
+        .success-message {
+
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 12px;
+
+            border-radius: 7px;
+
+            background: #ecfdf5;
+
+            color: #166534;
+
+            border: 1px solid #bbf7d0;
+
+            text-align: center;
+
+            font-size: 14px;
+        }
+
+
+        /* Mobile */
+
+        @media (max-width: 760px) {
+
+            body {
+                padding: 20px;
+            }
+
+            .container {
+                padding: 25px;
+            }
+
+            .form-group {
+                flex: 1 1 100%;
+            }
+        }
+
+
+        @media (max-width: 560px) {
+
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 20px;
+                border-radius: 10px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<form class="container" id="repairForm">
+
+
+    <!-- CUSTOMER DETAILS -->
+
+    <section class="section">
+
+        <div class="header">
+
+            <a href="index.html" class="back-button">
+                ←
+            </a>
+
+            <h2>
+                Customer Details
+            </h2>
+
+        </div>
+
+
+        <div class="form-row">
+
+
+            <!-- Name -->
+
+            <div class="form-group">
+
+                <label for="name">
+                    Name
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Customer name"
+                    autocomplete="name"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Phone -->
+
+            <div class="form-group">
+
+                <label for="phone">
+                    Phone Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="Phone number"
+                    autocomplete="tel"
+                    inputmode="numeric"
+                    maxlength="10"
+                    required
+                >
+
+            </div>
+
+
+        </div>
+
+
+        <!-- Address -->
+
+        <div class="form-group">
+
+            <label for="address">
+                Address
+            </label>
+
+            <input
+                type="text"
+                id="address"
+                name="address"
+                placeholder="Customer address"
+                autocomplete="street-address"
+                required
+            >
+
+        </div>
+
+    </section>
+
+
+
+    <!-- APPLIANCE DETAILS -->
+
+    <section class="section">
+
+
+        <div class="header">
+
+            <h2>
+                Appliance Details
+            </h2>
+
+        </div>
+
+
+        <!-- Appliance -->
+
+        <div class="form-group">
+
+            <label for="appliance_type">
+                Type of Appliance
+            </label>
+
+
+            <input
+                list="applianceList"
+                id="appliance_type"
+                name="appliance_type"
+                placeholder="Select or type appliance"
+                required
+            >
+
+
+            <datalist id="applianceList">
+
+                <option value="Electric Jug">
+                <option value="Electric Iron">
+                <option value="Electric Kettle">
+                <option value="Induction Cooker">
+                <option value="Rice Cooker">
+                <option value="Electric Oven">
+                <option value="Microwave Oven">
+                <option value="Toaster">
+                <option value="Sandwich Maker">
+                <option value="Electric Grill">
+                <option value="Electric Chopper">
+                <option value="Mixer Grinder">
+                <option value="Blender">
+                <option value="Juicer">
+                <option value="Food Processor">
+                <option value="Hand Blender">
+                <option value="Coffee Maker">
+                <option value="Electric Beater">
+
+                <option value="Water Dispenser">
+                <option value="Water Purifier">
+                <option value="Electric Stove">
+                <option value="Geyser / Water Heater">
+                <option value="Room Heater">
+
+                <option value="Ceiling Fan">
+                <option value="Table Fan">
+                <option value="Pedestal Fan">
+                <option value="Exhaust Fan">
+                <option value="Wall Fan">
+
+                <option value="Air Cooler">
+                <option value="Air Conditioner">
+
+                <option value="Refrigerator">
+                <option value="Deep Freezer">
+
+                <option value="Washing Machine">
+                <option value="Clothes Dryer">
+                <option value="Vacuum Cleaner">
+
+                <option value="Water Pump">
+                <option value="Submersible Pump">
+
+                <option value="Sewing Machine">
+
+                <option value="Hair Dryer">
+                <option value="Hair Straightener">
+                <option value="Hair Curler">
+                <option value="Electric Shaver">
+                <option value="Trimmer">
+                <option value="Electric Toothbrush">
+                <option value="Electric Massager">
+                <option value="Electric Blanket">
+
+                <option value="Emergency Light">
+                <option value="Rechargeable Light">
+                <option value="LED Light">
+                <option value="Tube Light">
+                <option value="LED Panel Light">
+                <option value="Chandelier">
+
+                <option value="Inverter">
+                <option value="UPS">
+                <option value="Battery Charger">
+                <option value="Voltage Stabilizer">
+                <option value="Extension Board">
+                <option value="Power Strip">
+                <option value="Power Adapter">
+                <option value="Transformer">
+
+                <option value="Electrical Switch">
+                <option value="Electrical Socket">
+                <option value="Electrical Plug">
+                <option value="Fan Regulator">
+                <option value="Light Dimmer">
+
+                <option value="Electric Doorbell">
+                <option value="Electric Lock">
+
+                <option value="CCTV Camera">
+                <option value="CCTV DVR">
+
+                <option value="Television">
+                <option value="LED TV">
+
+                <option value="Speaker">
+                <option value="Home Theater">
+                <option value="Amplifier">
+                <option value="Radio">
+
+                <option value="Computer Power Supply">
+                <option value="Computer Monitor">
+                <option value="Printer">
+                <option value="Laptop Charger">
+                <option value="Mobile Charger">
+
+                <option value="Electric Motor">
+
+                <option value="Other">
+
+            </datalist>
+
+        </div>
+
+
+
+        <!-- Brand / Model -->
+
+        <div class="form-row">
+
+
+            <div class="form-group">
+
+                <label for="brand">
+                    Brand
+                </label>
+
+                <input
+                    type="text"
+                    id="brand"
+                    name="brand"
+                    placeholder="e.g. Philips"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="model">
+                    Model
+                </label>
+
+                <input
+                    type="text"
+                    id="model"
+                    name="model"
+                    placeholder="Model number"
+                >
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- Serial -->
+
+        <div class="form-group">
+
+            <label for="serial">
+                Serial Number
+            </label>
+
+            <input
+                type="text"
+                id="serial"
+                name="serial"
+                placeholder="Serial number"
+            >
+
+        </div>
+
+
+
+        <!-- Problem -->
+
+        <div class="form-group">
+
+            <label for="problem">
+                Problem / Complaint
+            </label>
+
+            <textarea
+                id="problem"
+                name="problem"
+                placeholder="Describe the problem..."
+            ></textarea>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- SUBMIT -->
+
+    <button
+        type="submit"
+        class="submit-button"
+    >
+        Add Repair Job
+    </button>
+
+
+    <!-- Success -->
+
+    <div
+        id="successMessage"
+        class="success-message"
+    ></div>
+
+
+</form>
+
+
+
+<script>
+
+
+    const form =
+        document.getElementById("repairForm");
+
+
+    const successMessage =
+        document.getElementById("successMessage");
+
+
+    // Load existing jobs
+
+    let data =
+        JSON.parse(localStorage.getItem("repairData")) || [];
+
+
+
+    // Phone number validation
+
+    const phoneInput =
+        document.getElementById("phone");
+
+
+    phoneInput.addEventListener("input", function () {
+
+        // Remove anything that isn't a number
+
+        this.value =
+            this.value.replace(/\D/g, "");
+
+    });
+
+
+
+    // Form submission
+
+    form.addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+
+        // Get form values
+
+        const customerName =
+            document.getElementById("name")
+                .value
+                .trim();
+
+
+        const address =
+            document.getElementById("address")
+                .value
+                .trim();
+
+
+        const phone =
+            document.getElementById("phone")
+                .value
+                .trim();
+
+
+        const appliance =
+            document.getElementById("appliance_type")
+                .value
+                .trim();
+
+
+        const brand =
+            document.getElementById("brand")
+                .value
+                .trim();
+
+
+        const model =
+            document.getElementById("model")
+                .value
+                .trim();
+
+
+        const serialNumber =
+            document.getElementById("serial")
+                .value
+                .trim();
+
+
+        const problem =
+            document.getElementById("problem")
+                .value
+                .trim();
+
+
+
+        // Create Job ID
+
+        const jobId =
+            Date.now();
+
+
+        // Create repair job
+
+        const repairJob = {
+
+            jobId: jobId,
+
+            date:
+                new Date().toLocaleDateString(),
+
+            customer: {
+
+                name: customerName,
+
+                phone: phone,
+
+                address: address
+
+            },
+
+            appliance: {
+
+                type: appliance,
+
+                brand: brand,
+
+                model: model,
+
+                serialNumber: serialNumber
+
+            },
+
+            repair: {
+
+                complaint: problem,
+
+                status: "Received"
+
+            }
+
+        };
+
+
+
+        // Add to array
+
+        data.push(repairJob);
+
+
+
+        // Save to localStorage
+
+        localStorage.setItem(
+            "repairData",
+            JSON.stringify(data)
+        );
+
+
+
+        // Show success message
+
+        successMessage.style.display = "block";
+
+        successMessage.innerHTML =
+
+            `✓ Repair job added successfully!<br>
+             Job ID: ${jobId}`;
+
+
+
+        // Clear form
+
+        form.reset();
+
+
+
+        // Hide success message after 4 seconds
+
+        setTimeout(function() {
+
+            successMessage.style.display = "none";
+
+        }, 4000);
+
+
+        console.log("New repair job:", repairJob);
+
+    });
+
+
+</script>
+
+
+</body>
+
+</html>

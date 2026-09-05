@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Search Jobs - Waiba</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f6f8;
+            color: #222;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+
+        /* Header */
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            background: #222;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+
+        /* Search Area */
+
+        .search-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .search-controls {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 10px;
+        }
+
+        select,
+        input {
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        select:focus,
+        input:focus {
+            border-color: #555;
+        }
+
+
+        /* Job Card */
+
+        .job-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+
+        .job-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .job-id {
+            color: #777;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .job-date {
+            color: #888;
+            font-size: 13px;
+        }
+
+
+        /* Information */
+
+        .job-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .info {
+            font-size: 14px;
+        }
+
+        .info strong {
+            color: #333;
+        }
+
+
+        /* Status */
+
+        .status-row {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status {
+            padding: 6px 12px;
+            background: #eee;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+
+        /* Delete */
+
+        .delete-btn {
+            background: #222;
+            color: white;
+            border: none;
+            padding: 9px 14px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background: #444;
+        }
+
+
+        /* Clear All */
+
+        .clear-section {
+            margin-top: 25px;
+            text-align: right;
+        }
+
+        .clear-btn {
+            background: #b00020;
+            color: white;
+            border: none;
+            padding: 11px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+
+        /* Empty */
+
+        .empty {
+            background: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 12px;
+            color: #777;
+        }
+
+
+        /* Mobile */
+
+        @media (max-width: 650px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .header {
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .header h1 {
+                font-size: 23px;
+            }
+
+            .search-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .job-info {
+                grid-template-columns: 1fr;
+            }
+
+            .status-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .delete-btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- Header -->
+
+    <div class="header">
+
+        <h1>Search Jobs</h1>
+
+        <a href="index.html" class="back-btn">
+            ← Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- Search -->
+
+    <div class="search-box">
+
+        <div class="search-controls">
+
+            <select id="searchType">
+
+                <option value="all">
+                    All Fields
+                </option>
+
+                <option value="name">
+                    Customer Name
+                </option>
+
+                <option value="phone">
+                    Phone Number
+                </option>
+
+                <option value="address">
+                    Address
+                </option>
+
+                <option value="appliance">
+                    Appliance
+                </option>
+
+                <option value="brand">
+                    Brand
+                </option>
+
+                <option value="model">
+                    Model
+                </option>
+
+                <option value="serial">
+                    Serial Number
+                </option>
+
+                <option value="problem">
+                    Problem
+                </option>
+
+                <option value="jobId">
+                    Job ID
+                </option>
+
+            </select>
+
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search repair jobs..."
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- Results -->
+
+    <div id="jobsContainer"></div>
+
+
+    <!-- Clear All -->
+
+    <div class="clear-section">
+
+        <button
+            class="clear-btn"
+            onclick="clearAllRecords()"
+        >
+            Clear All Records
+        </button>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+    // Load data
+
+    let data =
+        JSON.parse(localStorage.getItem("repairData")) || [];
+
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const searchType =
+        document.getElementById("searchType");
+
+    const jobsContainer =
+        document.getElementById("jobsContainer");
+
+
+    // Display jobs
+
+    function displayJobs(jobs) {
+
+        jobsContainer.innerHTML = "";
+
+
+        if (jobs.length === 0) {
+
+            jobsContainer.innerHTML = `
+
+                <div class="empty">
+
+                    <h3>No jobs found</h3>
+
+                    <p>
+                        Try a different search.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        // Newest first
+
+        jobs.sort((a, b) => b.jobId - a.jobId);
+
+
+        jobs.forEach(job => {
+
+            const card =
+                document.createElement("div");
+
+            card.className = "job-card";
+
+
+            card.innerHTML = `
+
+                <div class="job-top">
+
+                    <div>
+
+                        <strong>
+                            ${job.customer.name}
+                        </strong>
+
+                        <div class="job-id">
+                            Job ID: ${job.jobId}
+                        </div>
+
+                    </div>
+
+                    <div class="job-date">
+                        ${job.date}
+                    </div>
+
+                </div>
+
+
+                <div class="job-info">
+
+                    <div class="info">
+                        <strong>Phone:</strong>
+                        ${job.customer.phone}
+                    </div>
+
+                    <div class="info">
+                        <strong>Address:</strong>
+                        ${job.customer.address}
+                    </div>
+
+                    <div class="info">
+                        <strong>Appliance:</strong>
+                        ${job.appliance.type}
+                    </div>
+
+                    <div class="info">
+                        <strong>Brand:</strong>
+                        ${job.appliance.brand}
+                    </div>
+
+                    <div class="info">
+                        <strong>Model:</strong>
+                        ${job.appliance.model}
+                    </div>
+
+                    <div class="info">
+                        <strong>Serial Number:</strong>
+                        ${job.appliance.serialNumber}
+                    </div>
+
+                    <div class="info">
+                        <strong>Problem:</strong>
+                        ${job.repair.complaint}
+                    </div>
+
+                </div>
+
+
+                <div class="status-row">
+
+                    <div class="status">
+                        ${job.repair.status}
+                    </div>
+
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteRepair(${job.jobId})"
+                    >
+                        Delete
+                    </button>
+
+                </div>
+
+            `;
+
+
+            jobsContainer.appendChild(card);
+
+        });
+
+    }
+
+
+    // Search
+
+    function searchJobs() {
+
+        const text =
+            searchInput.value
+                .toLowerCase()
+                .trim();
+
+
+        const type =
+            searchType.value;
+
+
+        if (text === "") {
+
+            displayJobs([...data]);
+
+            return;
+
+        }
+
+
+        const filteredJobs =
+            data.filter(job => {
+
+                let value = "";
+
+
+                if (type === "name") {
+
+                    value =
+                        job.customer.name;
+
+                }
+
+                else if (type === "phone") {
+
+                    value =
+                        job.customer.phone;
+
+                }
+
+                else if (type === "address") {
+
+                    value =
+                        job.customer.address;
+
+                }
+
+                else if (type === "appliance") {
+
+                    value =
+                        job.appliance.type;
+
+                }
+
+                else if (type === "brand") {
+
+                    value =
+                        job.appliance.brand;
+
+                }
+
+                else if (type === "model") {
+
+                    value =
+                        job.appliance.model;
+
+                }
+
+                else if (type === "serial") {
+
+                    value =
+                        job.appliance.serialNumber;
+
+                }
+
+                else if (type === "problem") {
+
+                    value =
+                        job.repair.complaint;
+
+                }
+
+                else if (type === "jobId") {
+
+                    value =
+                        String(job.jobId);
+
+                }
+
+
+                // All fields
+
+                if (type === "all") {
+
+                    return (
+
+                        job.customer.name
+                            .toLowerCase()
+                            .includes(text)
+
+                        ||
+
+                        job.customer.phone
+                            .toLowerCase()
+                            .includes(text)
+
+                        ||
+
+                        job.customer.address
+                            .toLowerCase()
+                            .includes(text)
+
+                        ||
+
+                        job.appliance.type
+                            .toLowerCase()
+                            .includes(text)
+
+                        ||
+
+                        job.appliance.brand
+                            .toLowerCase()
+                            .includes(text)
+
+                        ||
+
+                        job.appliance.model
+                            .toLowerCase()
+                            .includes(text)
+
+                        ||
+
+                        job.appliance.serialNumber
+                            .toLowerCase()
+                            .includes(text)
+
+                        ||
+
+                        job.repair.complaint
+                            .toLowerCase()
+                            .includes(text)
+
+                        ||
+
+                        String(job.jobId)
+                            .includes(text)
+
+                    );
+
+                }
+
+
+                return String(value)
+                    .toLowerCase()
+                    .includes(text);
+
+            });
+
+
+        displayJobs(filteredJobs);
+
+    }
+
+
+    // Delete one job
+
+    function deleteRepair(jobId) {
+
+        const job =
+            data.find(job => job.jobId === jobId);
+
+
+        if (!job) {
+            return;
+        }
+
+
+        const confirmed =
+            confirm(
+                `Delete the repair record for "${job.customer.name}"?`
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        data =
+            data.filter(job => job.jobId !== jobId);
+
+
+        localStorage.setItem(
+            "repairData",
+            JSON.stringify(data)
+        );
+
+
+        searchJobs();
+
+    }
+
+
+    // Delete everything
+
+    function clearAllRecords() {
+
+        if (data.length === 0) {
+
+            alert(
+                "There are no repair records to delete."
+            );
+
+            return;
+        }
+
+
+        const firstConfirm =
+            confirm(
+                "WARNING!\n\n" +
+                "This will permanently delete ALL repair records.\n\n" +
+                "Do you want to continue?"
+            );
+
+
+        if (!firstConfirm) {
+            return;
+        }
+
+
+        const confirmation =
+            prompt(
+                'Type "CONFIRM" to permanently delete ALL records:'
+            );
+
+
+        if (confirmation !== "CONFIRM") {
+
+            alert(
+                "Records were NOT deleted.\n\n" +
+                "You must type CONFIRM exactly."
+            );
+
+            return;
+        }
+
+
+        localStorage.removeItem("repairData");
+
+
+        data = [];
+
+
+        displayJobs(data);
+
+
+        alert(
+            "All repair records have been deleted."
+        );
+
+    }
+
+
+    // Search when typing
+
+    searchInput.addEventListener(
+        "input",
+        searchJobs
+    );
+
+
+    // Search when changing field
+
+    searchType.addEventListener(
+        "change",
+        searchJobs
+    );
+
+
+    // Show all jobs initially
+
+    displayJobs([...data]);
+
+
+</script>
+
+
+</body>
+</html>
